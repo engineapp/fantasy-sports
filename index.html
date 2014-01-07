@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" class="loading">
+  <head>
+    <meta charset="utf-8">
+    <script>console.log('starting up...')</script>
+    <title>Fantasy Sports Analysis</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container" id="app">
+      <div class="controls">
+        <h1>Leaderboard</h1>
+        <label class="source">source key: <input type="text" id="source" value="0AiSKtYdjilZadFNINUxBeUpyX2R3Y1U2a2oyVTZ3aWc" /></label>
+        <label>
+          Last <input type="number" id="days" min="1" max="365" value="10" /> Days
+        </label>
+      </div>
+      <div class="chart">
+      </div>
+    </div>
+    <script src="d3.js"></script>
+    <script src="zepto.js"></script>
+    <script src="spreadsheet.js"></script>
+    <script src="chart.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

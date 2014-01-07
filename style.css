@@ -1,0 +1,68 @@
+div {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-size: 16px;
+  font-family: sans-serif;
+  color: #eee;
+  background: #234;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 1em;
+  width: 80%;
+  min-height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  transition: min-height 0.4s;
+}
+
+.loading .container {
+  min-height: 0%;
+}
+
+.controls {
+  font-size: 0;
+  text-align: justify;
+}
+.controls:after {
+  display: inline-block;
+  content: "";
+  width: 100%;
+  height: 0;
+}
+.controls > * {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+input {
+  margin: 0 0.4em;
+  padding: 0 0.5em;
+  font: inherit;
+  line-height: inherit;
+  border: none;
+  border-radius: 2px 2px 0 0;
+  border-bottom: 1px rgba(255, 255, 255, 0.4) dashed;
+  color: inherit;
+  background: transparent;
+}
+input:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+input:focus {
+  background: rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+.source {
+  font-size: 0.667rem;
+}
+.source input {
+  width: 18em;
+}
