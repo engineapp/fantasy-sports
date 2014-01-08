@@ -14,7 +14,7 @@ new (function(container) {
   var self = this;
 
   var dataProvider = new GData(),
-      charter      = new Chart($('.chart'));
+      charter      = new Chart($('.chart', container)[0]);
 
   var sourceInput = $('#source', container),
       daysInput   = $('#days', container);
@@ -22,8 +22,17 @@ new (function(container) {
 
   this.draw = function() {
     log('drawing...');
-    var data = dataProvider.getData();
-    charter.update(data);
+    var sheetData = dataProvider.getData();
+    var scores = sheetData.map(function(sheet) {
+      var gps = sheet.data.reduce(function(prev, d) { return prev + d[1] }, 0.0);
+      var points = sheet.data.reduce(function(prev, d) { return prev + d[2] }, 0.0);
+      var average = points / gps;
+      return {
+        team: sheet.team,
+        average: average,
+      }     
+    });
+    charter.update(scores);
   };
 
 
