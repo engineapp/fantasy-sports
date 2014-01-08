@@ -13,10 +13,14 @@ body {
   background: #234;
 }
 
+a {
+  color: #ccc;
+  text-decoration: none;
+}
+
 .container {
   margin: 0 auto;
   padding: 1em;
-  width: 80%;
   min-height: 100%;
   background: rgba(255, 255, 255, 0.15);
   transition: min-height 0.4s;
@@ -64,5 +68,49 @@ input:focus {
   font-size: 0.667rem;
 }
 .source input {
-  width: 18em;
+  display: none;  /* media-queried in */
+  width: 9em;
+}
+
+
+.chart {
+  margin-top: 1em;
+}
+.chart > div {
+  margin: 0.618rem 0;
+  line-height: 2rem;
+  font-size: 0;
+}
+.chart > div > * {
+  font-size: 1rem;
+}
+.team,
+.average {
+  display: inline-block;
+}
+.average {
+  box-sizing: border-box;
+  padding: 0 0.5em;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (min-width: 512px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 80%;
+  }
+  .source input {
+    display: inline-block;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    width: 960px;
+  }
 }
