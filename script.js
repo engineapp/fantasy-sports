@@ -11,6 +11,8 @@ var log = (function() {
 
 new (function(container) {
 
+  var self = this;
+
   var dataProvider = new GData(),
       charter      = new Chart($('.chart'));
 
@@ -28,15 +30,17 @@ new (function(container) {
   //// Mess with Data
 
   this.loadData = function(callback) {
-    log('loading data...')
+    log('loading data...');
     var key = sourceInput.val();
-    dataProvider.load(key, callback || this.draw);
+    if (typeof callback !== "function") callback = self.draw;
+    dataProvider.load(key, callback);
   };
 
   this.filterData = function(callback) {
-    log('filtering data...')
+    log('filtering data...');
     var filter = daysInput.val();
-    dataProvider.setLimit(filter, callback || this.draw);
+    if (typeof callback !== "function") callback = self.draw;
+    dataProvider.setLimit(filter, callback);
   };
 
 

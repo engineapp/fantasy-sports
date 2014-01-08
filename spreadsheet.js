@@ -38,28 +38,32 @@ var google = {
 
 var GData = function() {
 
-  this.key = null;
-  this.days = null;
-  this.gdata = null;
+  var self = this;
+
+  self.key = null;
+  self.days = null;
+  self.dateLimit = null;
+  self.gdata = null;
 
 
-  this.gJax = function(options) {
+  self.gJax = function(options) {
     var defaults = {
       type: 'GET',
       data: {alt: 'json'},
       dataType: 'jsonp',
-      context: this,
+      context: self,
     };
     $.ajax($.extend(defaults, options));
   };
 
 
-  this.setData = function(sheets) {
-    console.log(sheets);
+  self.setData = function(sheets, callback) {
+    self.gdata = sheets;
+    if (typeof callback === 'function') callback();
   }
 
 
-  this.getSheet = function(sheets, n) {
+  self.getSheet = function(sheets, n, callback) {
 
     var cleanSheet = function(data) {
       cleaned = data.table.rows.map(function(row) {
@@ -70,18 +74,20 @@ var GData = function() {
 
     var gotSheet = function(data) {
       sheets[n].data = cleanSheet(data);
-      n < sheets.length-1 ? this.getSheet(sheets, n+1) : this.setData(sheets);
+      n < sheets.length-1
+        ? self.getSheet(sheets, n+1, callback)
+        : self.setData(sheets, callback);
     };
 
-    _gquerystate.lock(gotSheet, this);
-    this.gJax({
+    _gquerystate.lock(gotSheet, self);
+    self.gJax({
       url: sheets[n].href,
       jsonpCallback: _C.VIZ_CB,
     })
   };
 
 
-  this.getSheetBase = function() {
+  self.getSheetBase = function(callback) {
 
     var processBase = function(data) {
       var sheets = data.feed.entry.map(function (sheet) {
@@ -89,32 +95,41 @@ var GData = function() {
         return {team: sheet.title.$t,
                 href: link[0].href}
       });
-      this.getSheet(sheets, 0);
+      self.getSheet(sheets, 0, callback);
     };
 
-    this.gJax({
-      url: _C.SHEET_BASE.replace("<key>", this.key),
+    self.gJax({
+      url: _C.SHEET_BASE.replace("<key>", self.key),
       jsonpCallback: 'sheetBase',
       success: processBase,
     });
   };
 
 
-  //// Public methods
-
-  this.load = function(key, callback) {
-    this.key = key;
-    this.getSheetBase(this.loadSheets);
+  self.limitDays = function(data) {
+    return data[0] > self.dateLimit;
   };
 
-  this.setLimit = function(days, callback) {
-    this.days = days;
-    callback();
+
+  //// Public methods
+
+  self.load = function(key, callback) {
+    self.key = key;
+    self.getSheetBase(callback || function() {});
+  };
+
+  self.setLimit = function(days, callback) {
+    self.days = parseInt(days);
+    self.dateLimit = new Date((new Date()).getTime() - (1000*60*60*24*self.days));
+    if (typeof callback === 'function') callback();
   }
 
-  this.getData = function() {
-    return [];
+  self.getData = function() {
+    return self.gdata.map(function(teamData) {
+      var data = teamData.data.filter(self.limitDays)
+      return $.extend({}, teamData, {data: data});
+    });
   }
 
-  return this;
+  return self;
 };
