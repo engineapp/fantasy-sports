@@ -110,6 +110,10 @@ var GData = function() {
     return data[0] > self.dateLimit;
   };
 
+  self.limitData = function(teamData) {
+    return teamData.data.length !== 0;
+  };
+
 
   //// Public methods
 
@@ -128,7 +132,7 @@ var GData = function() {
     return self.gdata.map(function(teamData) {
       var data = teamData.data.filter(self.limitDays)
       return $.extend({}, teamData, {data: data});
-    });
+    }).filter(self.limitData);
   }
 
   return self;
